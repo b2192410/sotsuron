@@ -24,12 +24,6 @@ public abstract class AbstractDataSourceManager implements IDataSourceManager {
     }
 
     /**
-     * * シングルストンで実装するため、このクラスの利用時にインスタンスを取得するメソッド.
-     * @return IDataSourceManagerを実装したクラス.
-     */
-    public abstract IDataSourceManager getInstance();
-
-    /**
      * HikariDataSourceを取得する.
      * @return HikariDataSourceクラス.
      */

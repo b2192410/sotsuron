@@ -58,7 +58,6 @@ public final class ResultSetManager implements IResultSetManager {
             Object[] rsDataArray = new Object[columnCount];
             for (int j = 0; j < columnCount; j++) {
                 Object o = rs.getObject(j + 1);
-                System.out.println(o);
                 rsDataArray[j] = o;
             }
             objects.add(rsDataArray);
@@ -74,7 +73,7 @@ public final class ResultSetManager implements IResultSetManager {
     public Object getObject(
             final int rowIndex,
             final int columnIndex) {
-        return this.rsData[rowIndex][columnIndex];
+        return this.rsData[rowIndex - 1][columnIndex - 1];
     }
 
     @Override
@@ -82,7 +81,18 @@ public final class ResultSetManager implements IResultSetManager {
             final int rowIndex,
             final int columnIndex,
             final Class<T> tClass) {
-        return tClass.cast(getObject(rowIndex, columnIndex));
+        T t;
+        try {
+            t = (T) getObject(rowIndex, columnIndex);
+        } catch (ClassCastException e) {
+            Object o = getObject(rowIndex, columnIndex);
+            System.out.println("キャストがうまくいきませんでした。");
+            System.out.println("元のクラス" + o.getClass());
+            System.out.println("元のデータ" + o);
+            System.out.println("キャスト先のクラス" + tClass);
+            throw new ClassCastException();
+        }
+        return t;
     }
 
     @Override

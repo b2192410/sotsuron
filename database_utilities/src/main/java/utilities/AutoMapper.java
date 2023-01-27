@@ -3,6 +3,8 @@ package utilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 自動でIResultSetManagerの結果についてマッピングを試みるクラス.
@@ -20,7 +22,7 @@ public final class AutoMapper<T extends ITableEntity>
      * マッピング対象のクラスを指定してインスタンス化する.
      * @param tClass マッピング対象のクラス.
      */
-    AutoMapper(final Class<T> tClass) {
+    public AutoMapper(final Class<T> tClass) {
         this.tClass = tClass;
     }
 
@@ -31,7 +33,7 @@ public final class AutoMapper<T extends ITableEntity>
      * @return ITableEntityクラス.
      */
     @Override
-    public ITableEntity mapping(
+    public T mapping(
             final IResultSetManager resultSet,
             final int rowIndex
     ) {
@@ -46,7 +48,7 @@ public final class AutoMapper<T extends ITableEntity>
 
         for (int i = 0; i < fieldLength; i++) {
             argsClasses[i] = fields[i].getType();
-            rsDataArray[i] = resultSet.getObject(rowIndex, i, tClass);
+            rsDataArray[i] = resultSet.getObject(rowIndex, i + 1, argsClasses[i]);
         }
 
         Constructor<T> entityConstructor;
@@ -65,5 +67,22 @@ public final class AutoMapper<T extends ITableEntity>
             throw new RuntimeException(e);
         }
         return iEntity;
+    }
+
+    /**
+     * IResultSetManager内のすべての行に対してマッピングを行い、Listとして返すメソッド.
+     * @param resultSet SQLの実行結果.
+     * @return List型のITableEntityクラス.
+     */
+    public List<T> mappingToList(
+            final IResultSetManager resultSet
+    ) {
+        List<T> tList = new ArrayList<>();
+        System.out.println("row length -->>>" + resultSet.getRowLength());
+        for (int i = 1; i <= resultSet.getRowLength(); i++) {
+            T t = mapping(resultSet, i);
+            tList.add(t);
+        }
+        return tList;
     }
 }
