@@ -18,6 +18,6 @@ public final class CityQueries {
     public CityEntity selectCity(int id) {
         String sql = "SELECT * FROM city WHERE ID = ?";
         IResultSetManager resultSetManager = queryManager.executeQuery(sql, id);
-        return new AutoMapper<>(CityEntity.class).mapping(resultSetManager, 1);
+        return (CityEntity) new CityMapper().mapping(resultSetManager, 1);
     }
 }
