@@ -2,6 +2,11 @@
 このdatabase_utilitiesはJavaにおいて、JDBCと[HikariCP](https://github.com/brettwooldridge/HikariCP)
 を用いたデータベース利用を想定した場合の支援を目的としたライブラリです。
 
+# 可読性の高い実装をするために
+可読性の高い実装をするために、database_utilitiesのREADMEファイルに記述した各クラスの命名規則を守られることが望ましい。
+また、コーディング規約に則り実装を行われることが望ましい。
+この時、[CheckStyle](https://github.com/checkstyle/checkstyle)を利用することでコーディング規約に則った実装が支援される。
+
 # 使い方
 ## 概要
 このライブラリを用いることで、データベースを利用するために必要なクラスは以下の四つになる。
